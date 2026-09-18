@@ -173,3 +173,53 @@ Tests: **117/117 pass** (`node --test`; 105 existing + 12 new). $0 spent. No har
 4. **Native DAT path (Meta on-glasses voice)** — deferred by design; when wanted, it's Swift/Kotlin work under Meta's developer terms — a future lane, not a tap.
 
 Nothing else is gated. The Brilliant Labs lane needs no enrollment at all. **No saved logins were consumed by this verification; none were needed.**
+
+## 8. Productization record — v1.0.0 (2026-09-18)
+
+**Release:** KingCode Lens v1.0.0 — tag `v1.0.0` on main, GitHub release with
+logo-pack asset. Live demo: https://cumulativewebinc.github.io/cwi-kingcode-lens/
+
+**Name lock.** Product name is **KingCode Lens** on every product-facing
+surface (README, docs, demo UI, code comments, package metadata). The two
+remaining `cwi-glassface` strings in §§2–3 of this report are the historical
+legal record of the pre-rename slug correction and are kept intact
+deliberately. The repo slug keeps its old name; nothing user-facing does.
+
+**License.** Replaced the dual Apache-2.0 + COMMERCIAL-LICENSE.md posture
+with a single proprietary self-license: `LICENSE` (KingCode Lens Software
+License v1.0, © 2026 Cumulative Web Inc) — free for personal, development,
+and evaluation use; paid commercial license required for production
+(hp@cumulativeweb.com); no redistribution without written permission; IP
+retained; as-is, no warranty. `COMMERCIAL-LICENSE.md` removed (folded into
+`docs/licensing.md`); `package.json` license field updated. Twenty Minds
+run on the posture before commitment: `docs/TWENTY-MINDS-LICENSE-2026-09-18.md`
+(synthesis: ship proprietary; dissent: contrarian's open-washing risk,
+mitigated by plain-language licensing.md; confidence medium).
+
+**Logo.** Official crown + camera-lens mark: SVG master + PNG 512/256/128/64
+in `assets/logo/`; 64px PNG as the demo favicon; CWI badge alongside the
+product logo on the demo header per the standing brand rule. Copies in the
+brand asset library (`~/workspace/cwi-company/fan-network/assets/`).
+
+**Trademark notices.** `docs/legal/TRADEMARK-NOTICES.md`: Meta, Ray-Ban,
+Brilliant Labs, Android XR used descriptively only, no affiliation or
+endorsement (Meta Wearables Developer Terms §4).
+
+**Docs.** `docs/quickstart.md` (under one minute), `docs/simulator-lab.md`,
+`docs/qa-checklist.md`, `docs/licensing.md`, `SECURITY.md`,
+`CONTRIBUTING.md` (proprietary — no PRs), `SUPPORT.md`, `docs/llms.txt`,
+`docs/.well-known/agent-card.json` (agent discoverability). `CHANGELOG.md`
+added. Demo header shows name, logo, version, license summary, release
+download link.
+
+**CI.** `.github/workflows/test.yml` runs `npm test` on push/PR.
+
+**Repo posture.** About description set to "KingCode Lens — web apps for
+Meta Ray-Ban Display glasses, previewed in your browser. Simulator lab +
+conformance-tested adapter stack. No hardware needed." Topics:
+`smart-glasses`, `meta-ray-ban-display`, `web-simulator`, `voice-agents`,
+`javascript`.
+
+**Tests:** 117/117 pass (`node --test`). $0 spent. No hardware. No logins
+used. No spending, no wallet signing, no legal advice beyond standard
+license text.

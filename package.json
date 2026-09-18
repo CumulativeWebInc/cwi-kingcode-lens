@@ -1,1 +1,16 @@
-{"description":"KingCode Lens — invocable on-eyewear agent (\"Hey KingCode\"): wake detection, voice pipeline, avatar state machine, hardware adapter conformance suite, lens simulator. Simulator build; no hardware claims.","engines":{"node":">=18"},"license":"Apache-2.0","main":"src/index.js","name":"kingcode-lens","scripts":{"build:demo":"node tools/build-demo.mjs","demo":"node tools/serve-demo.mjs","test":"node --test test/*.test.js"},"type":"module","version":"1.0.0"}
+{
+  "description": "KingCode Lens \u2014 simulator + conformance-tested adapter stack for Meta Ray-Ban Display web apps: 600x600 additive lens simulator, voice pipeline, avatar state machine. Simulator build; no hardware claims.",
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "src/index.js",
+  "name": "kingcode-lens",
+  "scripts": {
+    "build:demo": "node tools/build-demo.mjs",
+    "demo": "node tools/serve-demo.mjs",
+    "test": "node --test test/*.test.js"
+  },
+  "type": "module",
+  "version": "1.0.0"
+}

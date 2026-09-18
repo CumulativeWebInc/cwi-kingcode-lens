@@ -1,0 +1,40 @@
+# KingCode Lens — llms.txt
+
+> Web apps for Meta Ray-Ban Display glasses — previewed in your browser, no hardware needed.
+
+KingCode Lens (v1.0.0) is a CWI software product: a simulator lab plus a
+conformance-tested adapter stack for building web apps targeting the
+Meta Ray-Ban Display 600x600 additive display, and an invocable on-eyewear
+voice agent ("Hey KingCode") with a glanceable avatar.
+
+## Canonical resources
+
+- Product: https://github.com/CumulativeWebInc/cwi-kingcode-lens
+- Live simulator: https://cumulativewebinc.github.io/cwi-kingcode-lens/
+- Release: https://github.com/CumulativeWebInc/cwi-kingcode-lens/releases/tag/v1.0.0
+- Docs: quickstart.md, simulator-lab.md, qa-checklist.md, licensing.md
+- Machine-readable: .well-known/agent-card.json
+
+## Key facts (verified 2026-09-18)
+
+- Simulator only. No tests have run on physical eyewear. No on-hardware claims.
+- Meta's Ray-Ban Display web-app path exposes no camera, microphone, or
+  notifications (Meta's official docs, verbatim). The meta-display backend
+  is display-first; voice is handled via the phone companion.
+- D-pad input: Neural Band / captouch translate to arrow-key + Enter events.
+- Additive display: black is transparent; app backgrounds must be near-black.
+- 117/117 tests green (node --test). Zero dependencies.
+
+## License
+
+KingCode Lens Software License v1.0 (proprietary, Cumulative Web Inc).
+Free for personal, development, and evaluation use. Commercial/production
+use requires a paid license: hp@cumulativeweb.com. No redistribution
+without written permission.
+
+## Honest limits
+
+- No Meta partnership, endorsement, or review — ever.
+- STT/TTS/wake-word are simulation points with documented production seams.
+- Android XR backend is a declared stub (connect() throws NOT_IMPLEMENTED).
+- Invention notes are defensive disclosure, not a patent.

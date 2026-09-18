@@ -272,6 +272,14 @@ export class MetaDisplayAdapter extends SimulatedTransportAdapter {
   }
 }
 
+/**
+ * DO NOT INSTANTIATE in production code. AndroidXRAdapter is a declared
+ * conformance stub: capabilities() answers honestly, but connect() always
+ * throws NOT_IMPLEMENTED — there is no Android XR transport in v1.
+ * It is exported only so the conformance suite can assert its declared
+ * not-implemented behavior. Production code must use BrilliantLabsAdapter
+ * or MetaDisplayAdapter.
+ */
 export class AndroidXRAdapter extends HardwareAdapter {
   get name() {
     return 'android-xr';

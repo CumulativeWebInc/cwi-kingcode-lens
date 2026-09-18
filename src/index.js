@@ -12,6 +12,8 @@ export {
   SimulatedTransportAdapter,
   BrilliantLabsAdapter,
   MetaDisplayAdapter,
+  // DO NOT INSTANTIATE — declared stub only (see adapters.js). Exported so
+  // the conformance suite can assert its not-implemented behavior.
   AndroidXRAdapter,
 } from './adapters.js';
 export { WakeDetector } from './wake.js';

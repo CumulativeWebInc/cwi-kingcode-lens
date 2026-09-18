@@ -5,17 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Meta Ray-Ban Display compatibility marker (wearables.developer.meta.com/docs/develop/webapps/build/) -->
 <meta name="mrbd-web-app-capable" content="yes">
+<meta name="description" content="KingCode Lens v1.0.0 — simulator lab + conformance-tested adapter stack for Meta Ray-Ban Display web apps. Free for personal, dev & eval.">
+<meta property="og:title" content="KingCode Lens v1.0.0 — On-Lens Simulator">
+<meta property="og:description" content="Web apps for Meta Ray-Ban Display glasses — previewed in your browser, no hardware needed.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cumulativewebinc.github.io/cwi-kingcode-lens/">
+<meta property="og:image" content="https://cumulativewebinc.github.io/cwi-kingcode-lens/assets/logo/kingcode-lens-logo-512.png">
+<meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="./favicon.png">
-<title>KingCode Lens — On-Lens Simulator</title>
+<title>KingCode Lens v1.0.0 — On-Lens Simulator</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <header>
-  <div class="title-row">
-    <h1>KingCode Lens</h1>
-    <span class="sim-badge">SIMULATOR</span>
+  <div class="product-banner">
+    <img src="./assets/logo/kingcode-lens-logo-128.png" alt="KingCode Lens logo" class="product-logo" width="72" height="72">
+    <div class="product-id">
+      <div class="title-row">
+        <h1>KingCode Lens</h1>
+        <span class="ver-badge">v1.0.0</span>
+        <span class="sim-badge">SIMULATOR</span>
+      </div>
+      <p class="tagline">Web apps for Meta Ray-Ban Display glasses &mdash; previewed in your browser, no hardware needed.</p>
+      <p class="license-line">Free for personal, development &amp; evaluation use &middot; <a href="https://github.com/CumulativeWebInc/cwi-kingcode-lens/blob/main/docs/licensing.md">license summary</a> &middot; <a href="https://github.com/CumulativeWebInc/cwi-kingcode-lens/releases/tag/v1.0.0">Download v1.0.0</a> &middot; Commercial licensing: hp@cumulativeweb.com</p>
+    </div>
+    <img src="./assets/logo/cwi-badge-96.jpg" alt="Cumulative Web Inc." class="cwi-badge" width="64" height="64">
   </div>
-  <p class="subtitle">Invocable on-eyewear agent &mdash; on-lens demo. No hardware, no glasses paired, no Meta partnership.</p>
+  <p class="subtitle">Simulated invocable on-eyewear agent &mdash; on-lens demo. No hardware, no glasses paired, no Meta partnership.</p>
 </header>
 
 <main>
@@ -79,7 +95,7 @@
         <button id="env-cam" class="ghost">Webcam: off</button>
         <button id="env-clear" class="ghost">Reset backdrop</button>
       </div>
-      <p class="hint">Official-simulator parity: built-in scenes, custom image upload, animated background, live webcam for real-world blending preview. The avatar layer composites additively (screen blend) over whatever is behind it.</p>
+      <p class="hint">Official-simulator parity: built-in scenes, custom image upload, animated background, live webcam for real-world blending preview. The avatar layer composites additively (screen blend) over whatever is behind it. Privacy: webcam and microphone are used only when you enable them; streams never leave your device (see <a href="https://github.com/CumulativeWebInc/cwi-kingcode-lens/blob/main/SECURITY.md">SECURITY.md</a>).</p>
     </div>
 
     <div class="control-group">
@@ -129,7 +145,7 @@
 
 <footer>
   <p><span class="sim-badge small">SIMULATOR</span> Everything on this page is simulated: wake-word spotting, mic audio, speech recognition/synthesis, and the lens itself. Single-process v1. No Meta partnership, endorsement, or review. No on-hardware validation. Nothing here is a patent &mdash; any invention notes are defensive disclosure only.</p>
-  <p>Source: <a href="https://github.com/CumulativeWebInc/cwi-kingcode-lens">github.com/CumulativeWebInc/cwi-kingcode-lens</a> &middot; Apache-2.0</p>
+  <p>Source: <a href="https://github.com/CumulativeWebInc/cwi-kingcode-lens">github.com/CumulativeWebInc/cwi-kingcode-lens</a> &middot; KingCode Lens Software License v1.0 &mdash; free for personal, dev &amp; eval; commercial use requires a license</p>
 </footer>
 
 <script type="module" src="./app.js"></script>
