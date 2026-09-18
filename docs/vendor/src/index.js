@@ -44,4 +44,9 @@ export {
   qaTapTarget,
   RECORDER,
   svgToDataUrl,
+  DISPLAY_FRAME,
+  displayFrameStyle,
+  PERF,
+  gradePerfBand,
+  qaPerformance,
 } from './sim-lab.js';
