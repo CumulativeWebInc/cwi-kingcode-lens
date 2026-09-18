@@ -37,6 +37,10 @@ import {
   RECORDER,
   svgToDataUrl,
   AUTO_DIM_MS,
+  // Simulator lab — parity additions: display-frame overlay + perf score
+  displayFrameStyle,
+  qaPerformance,
+  relativeLuminance,
 } from './vendor/src/index.js';
 
 const $ = (id) => document.getElementById(id);
@@ -368,6 +372,22 @@ $('set-dim').addEventListener('click', () => {
   if (!autoDim) { dimmed = false; clearTimeout(dimTimer); }
   applyDisplay(); poke();
 });
+/* ---------- display-frame overlay (official "Show Display Frame") ---------- */
+let frameOverlay = true;
+function applyFrameOverlay() {
+  const el = $('lens-boundary');
+  el.style.cssText = displayFrameStyle(frameOverlay);
+  const btn = $('set-frame');
+  btn.setAttribute('aria-pressed', String(frameOverlay));
+  btn.textContent = `Display frame: ${frameOverlay ? 'on' : 'off'}`;
+}
+$('set-frame').addEventListener('click', () => {
+  frameOverlay = !frameOverlay;
+  applyFrameOverlay();
+  log(`lab: display-frame overlay ${frameOverlay ? 'on' : 'off'} <span class="sim-badge small">SIMULATOR</span>`);
+  poke();
+});
+applyFrameOverlay();
 ['pointerdown', 'keydown', 'wheel'].forEach((ev) => document.addEventListener(ev, poke, { passive: true }));
 
 /* ---------- D-pad ---------- */
@@ -477,7 +497,7 @@ function focusVisiblePresent() {
   } catch { /* unreadable styles */ }
   return false;
 }
-$('qa-run').addEventListener('click', () => {
+$('qa-run').addEventListener('click', async () => {
   const lens = $('lens');
   const svg = hw && hw.lastFrame ? hw.lastFrame.svg : '';
   const sizes = [...svg.matchAll(/font-size="(\d+)"/g)].map((m) => +m[1]);
@@ -485,9 +505,20 @@ $('qa-run').addEventListener('click', () => {
   const focusables = [...document.querySelectorAll('button:not([disabled]), select, input:not([type="hidden"])')]
     .filter((el) => el.offsetParent !== null);
   const dpBtn = document.querySelector('.dpad button');
+  const noScroll = qaNoScroll({ scrollWidth: lens.scrollWidth, clientWidth: lens.clientWidth, scrollHeight: lens.scrollHeight, clientHeight: lens.clientHeight });
+  // Performance score — measured locally, not asserted. Render time is a real
+  // frame render; the dark-pixel ratio rasterizes the actual frame SVG.
+  const renderT0 = performance.now();
+  try { renderer.render('idle', 'SIMULATOR'); } catch { /* renderer exists after connect */ }
+  const perf = qaPerformance({
+    renderMs: performance.now() - renderT0,
+    focusables: focusables.length,
+    darkPixelRatio: await measureDarkPixelRatio(svg),
+    overflow: !noScroll.pass,
+  });
   const checks = [
     ['Lens surface', qaLensSize(lens.clientWidth, lens.clientHeight)],
-    ['No scroll', qaNoScroll({ scrollWidth: lens.scrollWidth, clientWidth: lens.clientWidth, scrollHeight: lens.scrollHeight, clientHeight: lens.clientHeight })],
+    ['No scroll', noScroll],
     ['Additive backdrop', qaFrameBackdrop(svg)],
     ['D-pad focusables', qaFocusableCount(focusables.length)],
     ['Visible focus styles', qaFocusVisible(focusVisiblePresent() ? 3 : 0)],
@@ -507,11 +538,41 @@ $('qa-run').addEventListener('click', () => {
     li.innerHTML = `<b>${esc(name)}</b><span class="d">${esc(r.detail)}${esc(extra)}</span>`;
     ul.appendChild(li);
   }
+  // Performance-score row, official style: score + per-check improvement prompts.
+  const perfCls = perf.band === 'excellent' || perf.band === 'good' ? 'pass' : (perf.band === 'needs work' ? 'warn' : 'fail');
+  const perfPrompts = perf.checks.filter((c) => c.prompt).map((c) => c.prompt);
+  const perfLi = document.createElement('li');
+  perfLi.className = perfCls;
+  perfLi.innerHTML = `<b>Performance score</b><span class="d">${perf.score}/100 — ${esc(perf.band)}. ` +
+    `${esc(perf.checks.map((c) => c.detail).join(' · '))}` +
+    `${perfPrompts.length ? ` Improvement: ${esc(perfPrompts.join(' '))}` : ''}</span>`;
+  ul.appendChild(perfLi);
   log(
-    `qa: <b>${pass}/${checks.length} pass</b>${warn ? `, ${warn} advisory` : ''} <span class="sim-badge small">SIMULATOR</span>`,
-    pass === checks.length ? 'ev-tool' : 'ev-decision',
+    `qa: <b>${pass}/${checks.length} pass</b>${warn ? `, ${warn} advisory` : ''}, perf <b>${perf.score}/100 (${esc(perf.band)})</b> <span class="sim-badge small">SIMULATOR</span>`,
+    pass === checks.length && (perf.band === 'excellent' || perf.band === 'good') ? 'ev-tool' : 'ev-decision',
   );
 });
+
+/** Rasterize the frame SVG at 100x100 and count near-black pixels — the honest additive-dark measurement. */
+async function measureDarkPixelRatio(svg) {
+  if (!svg) return NaN;
+  const img = await loadImg(svgToDataUrl(svg));
+  if (!img) return NaN;
+  try {
+    const c = document.createElement('canvas');
+    c.width = 100; c.height = 100;
+    const x = c.getContext('2d', { willReadFrequently: true });
+    x.drawImage(img, 0, 0, 100, 100);
+    const d = x.getImageData(0, 0, 100, 100).data;
+    let dark = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      if (relativeLuminance({ r: d[i], g: d[i + 1], b: d[i + 2] }) <= 0.08) dark++;
+    }
+    return dark / (d.length / 4);
+  } catch {
+    return NaN; // tainted canvas or no 2d context — qaPerformance degrades honestly
+  }
+}
 
 /* ---------- lab init ---------- */
 applyScene();

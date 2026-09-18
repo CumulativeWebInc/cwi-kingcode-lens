@@ -28,6 +28,7 @@
       <div class="lens-bg" id="lens-bg"></div>
       <video id="lens-cam" class="lens-bg" playsinline muted autoplay hidden></video>
       <div class="lens-frame" id="lens-frame"></div>
+      <div class="lens-boundary" id="lens-boundary" aria-hidden="true"></div>
     </div>
     <div class="lens-caption">
       <span id="lens-state">state: idle</span>
@@ -86,8 +87,8 @@
       <div class="slider-row"><span>App brightness</span><input type="range" id="set-app" min="20" max="120" value="100"><b id="set-app-v">100%</b></div>
       <div class="slider-row"><span>Background brightness</span><input type="range" id="set-bg" min="10" max="150" value="100"><b id="set-bg-v">100%</b></div>
       <div class="slider-row"><span>Background blur</span><input type="range" id="set-blur" min="0" max="20" value="0"><b id="set-blur-v">0px</b></div>
-      <div class="btn-row"><button id="set-dim" class="ghost">Auto-dim: on</button></div>
-      <p class="hint">Mirrors the official extension's display tuning. Auto-dim drops the app layer to 35% after 30s idle.</p>
+      <div class="btn-row"><button id="set-dim" class="ghost">Auto-dim: on</button><button id="set-frame" class="ghost" aria-pressed="true">Display frame: on</button></div>
+      <p class="hint">Mirrors the official extension's display tuning. Auto-dim drops the app layer to 35% after 30s idle. The display-frame toggle draws the official glasses overlay — a translucent rounded rectangle around the lens.</p>
     </div>
 
     <div class="control-group">
@@ -115,7 +116,7 @@
       <label>Lab: QA checklist <span class="sim-badge small">SIMULATOR</span></label>
       <div class="btn-row"><button id="qa-run">Run QA checklist</button></div>
       <ul id="qa-results" class="qa"></ul>
-      <p class="hint">Mirrors the official extension's automated checks — viewport surface, favicon, D-pad focusables, overflow, visible focus styles — plus the official design constraints: additive-dark backdrop, 16px/20px type, 88px tap targets.</p>
+      <p class="hint">Mirrors the official extension's automated checks — viewport surface, favicon, D-pad focusables, overflow, visible focus styles — plus the official design constraints: additive-dark backdrop, 16px/20px type, 88px tap targets — and the official performance score with improvement prompts.</p>
     </div>
 
     <div class="control-group">

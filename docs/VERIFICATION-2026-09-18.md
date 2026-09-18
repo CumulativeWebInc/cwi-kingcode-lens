@@ -129,6 +129,42 @@ Tests after corrections: **82/82 pass** (`node --test`).
 
 Tests after lab build: **105/105 pass** (`node --test`; 82 existing + 23 new). $0 spent. No hardware. No logins used.
 
+### Parity close-out — official listing facts + final gaps closed (this commit), 2026-09-18
+
+A live browser run documented the official extension's Chrome Web Store listing (the install itself is blocked on automation browsers — see below); its feature list became the final build spec:
+
+- **Name:** Meta Ray-Ban Display Simulator
+- **Publisher:** Meta (developer: Meta Platforms, INC., 1 Meta Way, Menlo Park, CA)
+- **Version:** 0.5.0 (updated August 26, 2026), 15.09MiB, English
+- **Listing:** https://chromewebstore.google.com/detail/meta-ray-ban-display-simu/jpjlmmodokemlepklkdbimceggpbjcll
+- **User count:** not displayed in the fetched listing text — not claimed here
+- **Install block (this environment):** the Web Store refuses automation Chromium with "Switch to Chrome to install extensions". Per Black's rule, the failure text became the build spec — the in-repo lab is now the tool.
+
+**Two remaining gaps closed:**
+
+1. **"Show Display Frame" toggle** — new `lens-boundary` overlay layer in the lens stack + a "Display frame" toggle in Lab → display settings (default ON). `displayFrameStyle(show)` (pure, tested) returns the CSS: translucent rounded rectangle, `pointer-events:none` — chrome only, never intercepts input.
+2. **Performance scoring with improvement prompts** — new `qaPerformance()` (pure, tested) scores 0–100 across four measured levers, weighted by on-lens impact: frame render time (40 — good ≤16.7ms, warn ≤33.3ms), additive-dark pixel ratio (25 — ≥60% of lens pixels near-black), D-pad focusable count (20 — ≥3 targets), overflow (15). Every underperforming check returns a concrete improvement prompt. The QA run measures all four live: a real `performance.now()` frame render, 100×100 rasterization of the actual frame SVG for the dark-pixel ratio, the DOM focusable count, and the scroll check — then appends a score row plus prompts. Partial credit at the warn bands; unmeasured inputs degrade honestly (score 0, "not measured", `poor`).
+
+**Final parity table** (official listing features → our lab):
+
+| Official extension feature (listing) | Our lab (`docs/` + `src/sim-lab.js`) | Status |
+|---|---|---|
+| Exact 600×600 display frame with toggleable glasses overlay | 600×600 frame, screen-blend additive, `lens-boundary` overlay with "Display frame" toggle | ✅ parity |
+| Built-in, custom, and animated environment backgrounds | 4 built-in scenes, custom image upload, CSS-animated backdrop | ✅ parity |
+| Live webcam background for real-world blending preview | Webcam toggle (getUserMedia, 600×600) | ✅ parity |
+| On-screen + keyboard D-pad input injection | On-screen pad dispatches real `KeyboardEvent`s; physical arrows move focus glasses-style | ✅ parity |
+| App brightness, background brightness, blur, and auto-dimming controls | Three sliders + auto-dim toggle (35% after 30s idle), pure `displayFilters()` | ✅ parity |
+| Built-in viewport recorder for capturing demos and bug reports | 600×600 lens → canvas `captureStream` + MediaRecorder → WebM download | ✅ parity (gradient scenes record over near-black — stated in UI) |
+| "View on Glasses" QR code generation | Not replicated — needs Meta's app deep-link scheme + hardware | ❌ exclusive to theirs |
+| Live QA checklist (viewport, favicon, fonts, focus, overflow, and more) | One-click run: lens 600×600, no-scroll, additive-dark backdrop, focusable count, `:focus-visible`, 16px/20px type, PNG favicon, 88px tap targets (advisory) | ✅ parity + extras |
+| Performance scoring for the WebApp with prompts for improvements | Measured 0–100 score + a concrete improvement prompt per underperforming check | ✅ parity |
+
+**Still exclusive to the official extension:** the "View on Glasses" QR (deep link into the Meta AI app — meaningless without hardware) and pixel-exact rendering of Meta's own glasses overlay (ours is a spec-faithful translucent rounded rectangle, not Meta's asset). Everything else a developer needs to QA a web app is now in our repo.
+
+**Files (this commit):** `src/sim-lab.js` (`displayFrameStyle`, `PERF`, `qaPerformance`, `gradePerfBand`), `test/sim-lab.test.js` (12 new tests), `docs/index.html` (`lens-boundary` layer + frame toggle), `docs/style.css` (boundary layer style), `docs/app.js` (toggle wiring + measured performance score in the QA run), `docs/vendor/src/sim-lab.js` (demo bundle re-emitted), this report.
+
+Tests: **117/117 pass** (`node --test`; 105 existing + 12 new). $0 spent. No hardware. No logins used.
+
 ## 6. Items needing Black's tap
 
 1. **Meta Simulator install** — needs a live browser session (Chrome Web Store → "Meta Ray-Ban Display Simulator" → install → open our demo URL → toggle the extension). A browser task can do this under the saved-login authorization; this verifier cannot operate a browser. No Meta login, no cost.

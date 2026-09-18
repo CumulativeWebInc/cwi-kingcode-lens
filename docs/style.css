@@ -45,6 +45,10 @@ main {
 #lens-cam { width: 100%; height: 100%; object-fit: cover; }
 .lens-frame { position: absolute; inset: 0; mix-blend-mode: screen; }
 .lens-frame svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 6px rgba(34,230,255,.35)); }
+/* Display-frame overlay (official "Show Display Frame" toggle): a translucent
+   rounded rectangle marking the physical lens boundary. Chrome only — never
+   intercepts pointer input. Style text comes from sim-lab.displayFrameStyle. */
+.lens-boundary { z-index: 40; }
 .lens-bg.animated {
   background: linear-gradient(120deg, #0a1420, #123043, #0a1420, #1a2f1a, #0a1420);
   background-size: 400% 400%;

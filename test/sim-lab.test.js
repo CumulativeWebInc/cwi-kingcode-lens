@@ -28,6 +28,11 @@ import {
   qaTapTarget,
   RECORDER,
   svgToDataUrl,
+  DISPLAY_FRAME,
+  displayFrameStyle,
+  PERF,
+  gradePerfBand,
+  qaPerformance,
 } from '../src/sim-lab.js';
 
 describe('sim-lab: lens spec', () => {
@@ -161,5 +166,80 @@ describe('sim-lab: recorder', () => {
     assert.ok(!url.includes('<') && !url.includes('>'), 'angle brackets must be encoded');
     const back = decodeURIComponent(url.slice('data:image/svg+xml;charset=utf-8,'.length));
     assert.equal(back, src, 'round-trips to identical SVG markup');
+  });
+});
+
+describe('sim-lab: display-frame overlay', () => {
+  it('returns empty CSS when the toggle is off', () => {
+    assert.equal(displayFrameStyle(false), '');
+    assert.equal(displayFrameStyle(0), '');
+  });
+  it('draws a translucent rounded rectangle when on', () => {
+    const css = displayFrameStyle(true);
+    assert.ok(css.includes(`border-radius:${DISPLAY_FRAME.borderRadius}`), 'rounded');
+    assert.ok(css.includes(`border:${DISPLAY_FRAME.border}`), 'translucent border');
+    assert.ok(css.includes('pointer-events:none'), 'overlay never intercepts input');
+    assert.ok(css.includes('position:absolute') && css.includes('inset:0'), 'frames the lens');
+  });
+});
+
+describe('sim-lab: performance score', () => {
+  const good = { renderMs: 8.2, focusables: 6, darkPixelRatio: 0.92, overflow: false };
+
+  it('weights sum to 100', () => {
+    assert.equal(Object.values(PERF.weights).reduce((a, b) => a + b, 0), 100);
+  });
+  it('scores 100/excellent for a healthy app', () => {
+    const r = qaPerformance(good);
+    assert.equal(r.score, 100);
+    assert.equal(r.band, 'excellent');
+    assert.ok(r.checks.every((c) => c.pass && c.prompt === null), 'no prompts when healthy');
+  });
+  it('slow-but-glanceable frames earn half render credit and an improvement prompt', () => {
+    const r = qaPerformance({ ...good, renderMs: 25 });
+    const c = r.checks.find((x) => x.id === 'render');
+    assert.ok(c.pass, 'inside the warn budget still passes');
+    assert.equal(c.score, PERF.weights.render / 2);
+    assert.ok(c.prompt && /Improvement/.test(c.prompt));
+    assert.ok(r.score < 100);
+  });
+  it('over-budget frames fail render', () => {
+    const c = qaPerformance({ ...good, renderMs: 60 }).checks.find((x) => x.id === 'render');
+    assert.ok(!c.pass);
+    assert.equal(c.score, 0);
+    assert.ok(/skip re-rendering/.test(c.prompt));
+  });
+  it('bright apps lose the dark-ratio share', () => {
+    const c = qaPerformance({ ...good, darkPixelRatio: 0.3 }).checks.find((x) => x.id === 'darkRatio');
+    assert.ok(!c.pass);
+    assert.equal(c.score, 0);
+    assert.ok(/near-black/.test(c.prompt));
+  });
+  it('mid-range dark ratio earns partial credit', () => {
+    const c = qaPerformance({ ...good, darkPixelRatio: 0.75 }).checks.find((x) => x.id === 'darkRatio');
+    assert.ok(c.pass);
+    assert.ok(c.score > 0 && c.score < PERF.weights.darkRatio);
+  });
+  it('fewer than 3 focusables fails with a D-pad prompt', () => {
+    const c = qaPerformance({ ...good, focusables: 1 }).checks.find((x) => x.id === 'focusables');
+    assert.ok(!c.pass && c.score === 0);
+    assert.ok(/D-pad/.test(c.prompt));
+  });
+  it('overflow fails with a no-scroll prompt', () => {
+    const c = qaPerformance({ ...good, overflow: true }).checks.find((x) => x.id === 'overflow');
+    assert.ok(!c.pass);
+    assert.ok(/avoid scrolling/.test(c.prompt));
+  });
+  it('degrades honestly on unmeasured inputs', () => {
+    const r = qaPerformance({});
+    assert.equal(r.score, 0);
+    assert.equal(r.band, 'poor');
+    assert.ok(r.checks.every((c) => !c.pass && c.prompt), 'every unmeasured check explains itself');
+  });
+  it('grades the bands', () => {
+    assert.equal(gradePerfBand(95), 'excellent');
+    assert.equal(gradePerfBand(80), 'good');
+    assert.equal(gradePerfBand(60), 'needs work');
+    assert.equal(gradePerfBand(20), 'poor');
   });
 });
