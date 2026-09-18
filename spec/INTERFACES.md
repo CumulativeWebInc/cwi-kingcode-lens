@@ -1,7 +1,12 @@
-> Canonical contract, held by the lane coordinator. This is a read-only copy (v1.1, 2026-09-18) for sibling workers — the coordinator's copy in `~/workspace/glassface/spec/INTERFACES.md` is authoritative.
+> Canonical contract, held by the lane coordinator. This copy was refreshed 2026-09-18 with the v1.2 vendor-lab verification amendments — the coordinator's copy in `~/workspace/glassface/spec/INTERFACES.md` is authoritative.
 
-# Glassface — Canonical Interface Contract v1.1
+# KingCode Lens — Canonical Interface Contract v1.1
 Date: 2026-09-18. Owner: ATHENA lane (coordinator-held). v1.1: all 8 Twenty-Minds amendments adopted (MetaDisplay is display-first on the web path — no on-glasses mic/voice; 'routed' = companion-signaled; frame seq; per-adapter recommendedThreshold; wake streaming contract; CONFIRMING renders full action + confirm/deny are session events; durable session schema + idempotency from SCALING.md §2.2).
+
+**v1.2 vendor-lab verification (2026-09-18):** every backend assumption re-checked against the vendors' official docs/labs:
+- **MetaDisplay — VERIFIED against Meta's official web-app docs** (wearables.developer.meta.com/docs/develop/webapps/build/): "Web Apps do not yet support: Camera, Microphone, Notifications" — verbatim. Fixed 600×600 viewport, additive waveguide (black = transparent), dark backgrounds, high-contrast UI. Input is Neural Band/captouch → arrow-key + Enter D-pad events, EMG pinch/drag web events; on-glasses composer for text input; "All elements must be focusable"; no mouse/touch/keyboard. `inputs` is therefore `['voice','dpad','emg-gesture']` where `'voice'` names the *product-level* activation modality (companion mic relayed via cloud), not a glasses API input. Audio output is absent from the web capability table → TTS stays companion-side. Native on-glasses voice lives only in the Device Access Toolkit (Swift/Kotlin): "Speak to your app through the device's microphones… Play audio to the user through the device's speakers", A2DP (output, hi-fi) vs HFP (8 kHz mono mic) — deferred to post-v1. Web apps are added on-device via the Meta AI app (Developer mode → Devices → Display Glasses settings → App connections → Web apps → Add a web app), or QA'd with **zero hardware** via the official **Meta Ray-Ban Display Simulator** Chrome extension (600×600 frame, additive blending, D-pad dispatch, QA checklist). **Mock Device Kit** exists for DAT testing without hardware (Android Studio).
+- **BrilliantLabs — VERIFIED against docs.brilliant.xyz + official hardware manual:** 640×400 color OLED (20° FOV), nose-bridge microphone, 720p camera, Lua-based OS, Bluetooth 5.3, accelerometer tap detection. **No D-pad — `inputs` is `['voice','tap']`** (tap = accelerometer tap/double-tap). **No speakers on Frame** → `audioOut: 'companion'`; TTS renders on the phone. Noa (open-source, Flutter) uses tap-to-talk + Whisper via the phone — so on-device custom wake word ("Hey KingCode") on the Lua OS needs frame-SDK mic-streaming confirmation; the week-4 false-accept gate stands either way. No gatekeeper, no enrollment, no official virtual device/simulator found — docs-level verification only; true lab test needs hardware.
+- **AndroidXR — stub holds.** Official Android XR Emulator exists (Android Studio Canary, XR Glasses AVD + phone-host AVD) for audio/display glasses testing; Jetpack XR SDK still in developer preview, no public glasses distribution channel. Declared NOT_IMPLEMENTED remains the honest label; the emulator is the future lab path.
 
 Every backend MUST satisfy these interfaces. Conformance suite tests each backend against the SAME suite.
 
@@ -44,7 +49,12 @@ class HardwareAdapter {
   // 'routed'  = activation signaled by the phone companion (companion app button/tap/gesture),
   //             delivered via ActivationSequencer.notifyRoutedActivation(). NOT a host-assistant
   //             hook — Meta's web path offers no third-party assistant integration.
-  inputs: string[],                    // e.g. ['voice','dpad'] or ['voice','gesture']
+  inputs: string[],                    // MetaDisplay: ['voice','dpad','emg-gesture'] — 'voice' is
+                                       // product-level (companion relay), NOT a glasses API input.
+                                       // BrilliantLabs: ['voice','tap'] — no D-pad on Frame.
+                                       // android-xr: declared stub.
+  audioOut: 'companion' | 'unverified',// BL: 'companion' (Frame has no speakers).
+                                       // MetaDisplay web path: 'unverified' (not in capability table).
   maxFrameBytes: number,               // lens payload budget; renderer must stay under it
   recommendedThreshold: number         // per-adapter decision-confidence threshold (default 0.75);
                                        // sequencer uses max(global threshold, adapter recommendation)

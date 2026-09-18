@@ -195,7 +195,12 @@ export class BrilliantLabsAdapter extends SimulatedTransportAdapter {
       wakeWord: 'custom', // we own "Hey KingCode" KWS on this backend
       // NOTE (spec §1 v1.1): custom wake ships only if it passes the week-4
       // false-accept gate; else v1 falls back to companion-tap.
-      inputs: ['voice', 'dpad'],
+      // Verified 2026-09-18 against Brilliant Labs docs/press: Frame's physical
+      // inputs are the nose-bridge mic + accelerometer tap/double-tap — no D-pad.
+      // 'voice' names the product-level activation modality (on-glasses mic).
+      inputs: ['voice', 'tap'],
+      // Verified: Frame has no speakers — TTS audio renders on the companion phone.
+      audioOut: 'companion',
       maxFrameBytes: 65536,
       recommendedThreshold: 0.75,
       transport: 'simulated-ble',
@@ -229,7 +234,14 @@ export class MetaDisplayAdapter extends SimulatedTransportAdapter {
         note: 'phone-companion mic relayed via cloud; web path has no on-glasses mic',
       },
       wakeWord: 'routed', // companion-signaled (tap/gesture) via notifyRoutedActivation()
-      inputs: ['voice', 'gesture'],
+      // Verified 2026-09-18 against Meta's official web-app docs: web apps see
+      // Neural Band/captouch as arrow-key + Enter D-pad events, plus EMG
+      // pinch/drag web events. 'voice' is NOT a web-app input — it names the
+      // product-level activation modality (companion mic relayed via cloud).
+      inputs: ['voice', 'dpad', 'emg-gesture'],
+      // Web-app audio output is absent from Meta's web capability table —
+      // TTS stays companion-side until proven otherwise.
+      audioOut: 'unverified',
       maxFrameBytes: 131072,
       // Relayed companion audio is noisier than on-glasses mic: recommend a
       // stricter bar. Sequencer uses max(global threshold, this value).

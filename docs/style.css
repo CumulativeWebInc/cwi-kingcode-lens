@@ -59,6 +59,11 @@ button {
   padding: 10px 16px; font: inherit; font-weight: 700; cursor: pointer;
 }
 button:disabled { opacity: .35; cursor: not-allowed; }
+/* Meta web-app QA: visible focus styles (D-pad focus must be obvious). */
+button:focus-visible, select:focus-visible, input[type=text]:focus-visible {
+  outline: 3px solid var(--cyan); outline-offset: 2px;
+}
+select:focus-visible, input[type=text]:focus-visible { border-color: var(--cyan); }
 button.ghost { background: transparent; color: var(--dim); border: 1px solid var(--line); font-weight: 400; margin-top: 8px; }
 button.yes { background: var(--green); }
 button.no { background: var(--red); color: #fff; }

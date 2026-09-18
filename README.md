@@ -51,7 +51,7 @@ npm run demo      # serve the lens simulator at http://localhost:8080
 ```
 
 Or open the hosted simulator (everything labeled **SIMULATOR**):
-**https://cumulativewebinc.github.io/cwi-glassface/**
+**https://cumulativewebinc.github.io/cwi-kingcode-lens/**
 
 Type a command (or use the browser's speech input), tap **Companion tap → ask KingCode** (or simulate "Hey KingCode" on the BrilliantLabs backend), and watch the avatar move through the activation states on the 600×600 lens. Destructive commands (`dismiss all`) always ask first; ambiguous ones confirm; denies and timeouts return to idle.
 
@@ -62,7 +62,8 @@ The canonical contract is `spec/INTERFACES.md` (coordinator-held, v1.1). Every b
 ## Honest limits (read before believing any demo)
 
 - **Simulator only.** The transports are deterministic simulations; no tests have run on physical eyewear. No "on Meta hardware" claim until a real-hardware test.
-- **No Meta partnership, endorsement, or review** — ever. Meta's Ray-Ban Display web-app path was verified (2026-09-18, against Meta's official wearables docs) to expose **no microphone, no `getUserMedia`, no voice hooks, and no third-party assistant integration**; those live only in the native Device Access Toolkit (deferred). That is why `meta-display` is display-first with companion-relayed audio.
+- **No Meta partnership, endorsement, or review** — ever. Meta's Ray-Ban Display web-app path was verified (2026-09-18, against Meta's official wearables docs, wearables.developer.meta.com/docs/develop/webapps/build/) to expose no microphone — verbatim: **"Web Apps do not yet support: Camera, Microphone, Notifications"**. No `getUserMedia`, no voice hooks, no third-party assistant integration; those live only in the native Device Access Toolkit (deferred). That is why `meta-display` is display-first with companion-relayed audio. Web inputs are Neural Band/captouch → arrow-key + Enter D-pad events and EMG pinch/drag; every on-lens element must be `.focusable`.
+- Full per-vendor lab verification: `docs/VERIFICATION-2026-09-18.md`.
 - **No on-hardware claims** of any kind in v1.
 - **v1 is single-process.** SessionStore and ToolRegistry are in-process; the horizontal path is documented in `docs/SCALING.md` and unclaimed until its load-test gates pass.
 - **STT/TTS v1 are simulation points.** STT takes deterministic text injection (browser demo maps Web Speech results onto the same path); TTS is deterministic PCM16 tone synthesis with a documented real-TTS swap point. Wake-word detection is a keyword-spotting simulation with a documented production seam.
