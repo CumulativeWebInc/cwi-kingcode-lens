@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KingCode Lens — On-Lens Simulator</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <div class="title-row">
+    <h1>KingCode Lens</h1>
+    <span class="sim-badge">SIMULATOR</span>
+  </div>
+  <p class="subtitle">Invocable on-eyewear agent &mdash; on-lens demo. No hardware, no glasses paired, no Meta partnership.</p>
+</header>
+
+<main>
+  <section class="lens-wrap">
+    <div class="lens-meta">
+      <span id="lens-spec">600 &times; 600 &middot; additive &middot; SIMULATED</span>
+      <span class="sim-badge small">SIMULATOR</span>
+    </div>
+    <div id="lens" aria-label="Simulated lens display"></div>
+    <div class="lens-caption">
+      <span id="lens-state">state: idle</span>
+      <span id="lens-seq">frame seq: —</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="control-group">
+      <label for="backend">Backend (simulated)</label>
+      <select id="backend">
+        <option value="meta-display" selected>meta-display &mdash; 600&times;600, routed (companion tap)</option>
+        <option value="brilliant-labs">brilliant-labs &mdash; 640&times;400, custom &ldquo;Hey KingCode&rdquo;</option>
+      </select>
+      <p class="hint" id="backend-hint">MetaDisplay is <strong>display-first</strong>: the web path has no on-glasses mic &mdash; voice shown here is phone-companion mic relayed via cloud (simulated).</p>
+    </div>
+
+    <div class="control-group">
+      <label for="cmd">Command</label>
+      <input id="cmd" type="text" value="what time is it" maxlength="120" autocomplete="off">
+      <div class="btn-row">
+        <button id="activate">Companion tap &rarr; ask KingCode</button>
+        <button id="speak" disabled>&#127908; Speak (Web Speech)</button>
+      </div>
+      <p class="hint">Try: <code>take note buy milk</code> &middot; <code>set timer 10 seconds</code> &middot; <code>dismiss all</code> (destructive &rarr; always confirms) &middot; <code>blorple fnord</code> (low confidence &rarr; confirms)</p>
+    </div>
+
+    <div class="control-group hidden" id="confirm-box">
+      <div class="confirm-prompt" id="confirm-prompt">Do&hellip;?</div>
+      <div class="btn-row">
+        <button id="yes" class="yes">Yes</button>
+        <button id="no" class="no">No</button>
+        <span id="countdown" class="countdown"></span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Activation event log <span class="sim-badge small">SIMULATOR</span></label>
+      <div id="log" aria-live="polite"></div>
+      <button id="clear-log" class="ghost">Clear log</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><span class="sim-badge small">SIMULATOR</span> Everything on this page is simulated: wake-word spotting, mic audio, speech recognition/synthesis, and the lens itself. Single-process v1. No Meta partnership, endorsement, or review. No on-hardware validation. Nothing here is a patent &mdash; any invention notes are defensive disclosure only.</p>
+  <p>Source: <a href="https://github.com/CumulativeWebInc/cwi-glassface">github.com/CumulativeWebInc/cwi-glassface</a> &middot; Apache-2.0</p>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
