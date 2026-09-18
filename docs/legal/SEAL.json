@@ -1,0 +1,13 @@
+{
+  "seal_type": "NEEDLE DROP-style defensive-publication anchor",
+  "document": "INVENTION-DISCLOSURE.md",
+  "document_sha256": "f7b06f293c076cdad5499a8a0f41c8ed6f186f778be4c0c0398d528557d78d4c",
+  "parent_link": "spec/INTERFACES.md",
+  "parent_sha256": "85d837394bcc2c692a5681cbee61d6662c300a3e905494f9f1575e02dee964eb",
+  "sealed_at_utc": "2026-09-18T12:04:49Z",
+  "chain_hash": "e887490a76ca5a5ea21f627a52fee37a3185e931308ca7686ae8ab410184bd43",
+  "sealed_by": "digital-licensing worker, ATHENA Glassface lane",
+  "pending_repo": "CumulativeWebInc/cwi-glassface (sibling worker building; this file + SEAL.json to be committed there by the lane coordinator)",
+  "legal_note": "This seal anchors authorship and date of a DEFENSIVE DISCLOSURE. It confers no patent rights and is not a patent filing.",
+  "verify": "sha256sum INVENTION-DISCLOSURE.md && cat SEAL.json"
+}
