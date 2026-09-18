@@ -104,7 +104,7 @@
       <div class="slider-row"><span>Background brightness</span><input type="range" id="set-bg" min="10" max="150" value="100"><b id="set-bg-v">100%</b></div>
       <div class="slider-row"><span>Background blur</span><input type="range" id="set-blur" min="0" max="20" value="0"><b id="set-blur-v">0px</b></div>
       <div class="btn-row"><button id="set-dim" class="ghost">Auto-dim: on</button><button id="set-frame" class="ghost" aria-pressed="true">Display frame: on</button></div>
-      <p class="hint">Mirrors the official extension's display tuning. Auto-dim drops the app layer to 35% after 30s idle. The display-frame toggle draws the official glasses overlay — a translucent rounded rectangle around the lens.</p>
+      <p class="hint">Mirrors the official extension's display tuning. Auto-dim drops the app layer to 35% after 30s idle. The display-frame toggle draws our approximation of the official display-frame overlay — a translucent rounded rectangle marking the lens boundary (not Meta's artwork).</p>
     </div>
 
     <div class="control-group">
@@ -129,6 +129,15 @@
     </div>
 
     <div class="control-group">
+      <label>Lab: view on glasses <span class="sim-badge small">SIMULATOR</span></label>
+      <div class="btn-row">
+        <button id="view-glasses">View on Glasses</button>
+        <button id="view-glasses-info" class="ghost" aria-label="About View on Glasses">&#9432;</button>
+      </div>
+      <p class="hint">Sends this demo toward physical glasses (needs the official Meta app + paired glasses).</p>
+    </div>
+
+    <div class="control-group">
       <label>Lab: QA checklist <span class="sim-badge small">SIMULATOR</span></label>
       <div class="btn-row"><button id="qa-run">Run QA checklist</button></div>
       <ul id="qa-results" class="qa"></ul>
@@ -147,6 +156,34 @@
   <p><span class="sim-badge small">SIMULATOR</span> Everything on this page is simulated: wake-word spotting, mic audio, speech recognition/synthesis, and the lens itself. Single-process v1. No Meta partnership, endorsement, or review. No on-hardware validation. Nothing here is a patent &mdash; any invention notes are defensive disclosure only.</p>
   <p>Source: <a href="https://github.com/CumulativeWebInc/cwi-kingcode-lens">github.com/CumulativeWebInc/cwi-kingcode-lens</a> &middot; KingCode Lens Software License v1.0 &mdash; free for personal, dev &amp; eval; commercial use requires a license</p>
 </footer>
+
+<!-- View on Glasses: honest fallback modal (no private Meta handoff scheme exists).
+     Never a fake "sending…" state: the QR encodes the demo URL for phone handoff. -->
+<div id="glasses-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="glasses-modal-title">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <h2 id="glasses-modal-title">View on Glasses</h2>
+      <span class="sim-badge small">SIMULATOR</span>
+      <button id="glasses-close" class="ghost modal-x" aria-label="Close dialog">&#10005;</button>
+    </div>
+    <p class="modal-note">Preview only — no hardware connected.</p>
+    <div class="qr-box">
+      <canvas id="glasses-qr" width="248" height="248" aria-label="QR code encoding the demo URL"></canvas>
+      <p class="hint" id="glasses-qr-caption">Scan with your phone to continue this demo in your mobile browser.</p>
+      <p class="hint hidden" id="glasses-qr-fallback">QR unavailable for this link — copy it instead:<br><span id="glasses-url" class="mono"></span></p>
+    </div>
+    <div class="req-box">
+      <b>To view on physical Meta Ray-Ban Display glasses:</b> open this page in the
+      official Meta companion app with paired glasses. The direct glasses handoff needs
+      Meta's app — this simulator can't push to hardware.
+    </div>
+    <div class="btn-row">
+      <button id="glasses-copy">Copy link</button>
+      <a id="glasses-docs" class="dl" href="https://wearables.developer.meta.com/docs/develop/webapps/build/" target="_blank" rel="noopener">Meta wearables developer docs &rarr;</a>
+    </div>
+    <p class="hint tiny" id="glasses-taps"></p>
+  </div>
+</div>
 
 <script type="module" src="./app.js"></script>
 </body>

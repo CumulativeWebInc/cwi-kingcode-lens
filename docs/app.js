@@ -42,6 +42,9 @@ import {
   qaPerformance,
   relativeLuminance,
 } from './vendor/src/index.js';
+/* "View on Glasses" fallback: client-side QR encoder (original CWI code,
+   zero dependencies — no external QR API, no uploads). */
+import { encodeQr } from './vendor/qrcode.js';
 
 const $ = (id) => document.getElementById(id);
 const lensEl = $('lens'), logEl = $('log');
@@ -482,6 +485,108 @@ $('rec-start').addEventListener('click', () => {
 });
 $('rec-stop').addEventListener('click', () => {
   if (recorder && recorder.state === 'recording') recorder.stop();
+});
+
+/* ---------- View on Glasses: honest fallback ----------
+ * The official extension hands the web app to physical glasses via Meta's
+ * private companion-app scheme, which we cannot replicate. A dead button is
+ * a lie and a fake handoff is worse — so the button opens this modal sheet:
+ * a client-side QR of the demo URL for phone handoff (the real utility),
+ * an honest requirements box, copy-link + Meta docs actions, and local
+ * tap-count telemetry feeding the 2026-10-30 on-face kill rule.
+ * Copy rules enforced: no "Sending to glasses…" fake progress, no success
+ * state without OS confirmation, the QR is never implied to put the app on
+ * glasses, and Meta's app is named as the requirement.
+ *
+ * Deep-link note: no public Meta URL scheme is documented for pushing a web
+ * app to glasses, so there is nothing honest to attempt. If Meta ever
+ * documents one, attempt it here with a ~1.5s timeout and show the fallback
+ * copy on timeout/failure — never a success state the OS didn't confirm.
+ */
+const GLASSES_TAPS_KEY = 'kcl-view-on-glasses-taps';
+const GLASSES_DEEP_LINK_SCHEME = null; // no public Meta scheme documented
+function glassesTapCount() {
+  try { return parseInt(localStorage.getItem(GLASSES_TAPS_KEY) || '0', 10) || 0; }
+  catch { return 0; }
+}
+function bumpGlassesTaps() {
+  const n = glassesTapCount() + 1;
+  try { localStorage.setItem(GLASSES_TAPS_KEY, String(n)); } catch { /* private mode */ }
+  return n;
+}
+/** Render the QR (with 4-module quiet zone) or degrade to copy-link. */
+function renderGlassesQr(url) {
+  const canvas = $('glasses-qr');
+  const caption = $('glasses-qr-caption');
+  const fallback = $('glasses-qr-fallback');
+  let qr = null;
+  try { qr = encodeQr(url); } catch { qr = null; }
+  const ctx = canvas.getContext ? canvas.getContext('2d') : null;
+  if (!qr || !ctx) {
+    canvas.classList.add('hidden');
+    caption.classList.add('hidden');
+    fallback.classList.remove('hidden');
+    $('glasses-url').textContent = url;
+    return;
+  }
+  canvas.classList.remove('hidden');
+  caption.classList.remove('hidden');
+  fallback.classList.add('hidden');
+  const quiet = 4;
+  const px = Math.max(1, Math.floor(canvas.width / (qr.size + quiet * 2)));
+  const draw = qr.size * px;
+  const off = Math.floor((canvas.width - draw) / 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#000000';
+  for (let r = 0; r < qr.size; r++) {
+    for (let c = 0; c < qr.size; c++) {
+      if (qr.modules[r * qr.size + c]) ctx.fillRect(off + c * px, off + r * px, px, px);
+    }
+  }
+}
+let glassesReturnFocus = null;
+function openGlassesModal() {
+  const taps = bumpGlassesTaps();
+  const url = location.href;
+  renderGlassesQr(url);
+  $('glasses-taps').textContent =
+    `View-on-Glasses taps on this device: ${taps} — feeds the 2026-10-30 on-face demo decision.`;
+  glassesReturnFocus = document.activeElement;
+  $('glasses-modal').classList.remove('hidden');
+  $('glasses-close').focus();
+  log(`view on glasses: fallback sheet opened (tap #${taps} on this device) <span class="sim-badge small">SIMULATOR</span>`, 'ev-state');
+}
+function closeGlassesModal() {
+  $('glasses-modal').classList.add('hidden');
+  if (glassesReturnFocus && glassesReturnFocus.focus) glassesReturnFocus.focus();
+}
+$('view-glasses').addEventListener('click', openGlassesModal);
+$('view-glasses-info').addEventListener('click', openGlassesModal);
+$('glasses-close').addEventListener('click', closeGlassesModal);
+$('glasses-modal').addEventListener('click', (e) => {
+  if (e.target === $('glasses-modal')) closeGlassesModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !$('glasses-modal').classList.contains('hidden')) closeGlassesModal();
+});
+$('glasses-copy').addEventListener('click', async () => {
+  const url = location.href;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    log('view on glasses: demo link copied', 'ev-tool');
+  } catch {
+    log('view on glasses: copy failed — long-press the link text instead', 'ev-err');
+  }
 });
 
 /* ---------- QA checklist ---------- */

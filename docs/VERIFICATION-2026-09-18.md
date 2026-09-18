@@ -223,3 +223,17 @@ conformance-tested adapter stack. No hardware needed." Topics:
 **Tests:** 117/117 pass (`node --test`). $0 spent. No hardware. No logins
 used. No spending, no wallet signing, no legal advice beyond standard
 license text.
+
+## 9. Parity assessment — linked (2026-09-18 follow-up)
+
+The feature-by-feature parity assessment against Meta's official simulator
+(Web Store listing, 2026-09-18) lives in
+[`docs/PARITY-vs-official.md`](./PARITY-vs-official.md): **21/21 official
+features have a counterpart**; the hardware-bound "View on Glasses" handoff
+is covered by an honest simulator-only fallback (spec:
+[`docs/VIEW-ON-GLASSES-FALLBACK-SPEC.md`](./VIEW-ON-GLASSES-FALLBACK-SPEC.md)),
+never a fake replication. The official extension was not installed or run —
+the assessment is based on Meta's public listing text + Meta's public
+`meta-wearables-webapp` README + repo source verification. No live
+official-extension validation is claimed. Overlay parity is behavioral only;
+the artwork is CWI's approximation, labeled as such in the demo UI.

@@ -2,6 +2,35 @@
 
 All notable changes to KingCode Lens. Dates in US/Eastern.
 
+## [Unreleased]
+
+### Added
+- "View on Glasses" honest fallback: the button stays (official-extension
+  parity); tap opens a `SIMULATOR`-badged modal sheet with a client-side QR
+  of the demo URL for phone handoff, an honest requirements box (Meta's
+  companion app named as the requirement), copy-link + Meta wearables
+  developer-docs actions, and a degraded copy-link state when the URL is
+  too long for a QR. No fake "sending…" state, no fake success, no
+  undocumented deep-link. Local-only `localStorage` tap counter
+  (`kcl-view-on-glasses-taps`) feeds the 2026-10-30 on-face kill rule.
+- `docs/vendor/qrcode.js`: original CWI QR encoder (zero dependencies) —
+  byte mode, UTF-8, error correction L, versions 1–5, payloads ≤106 bytes.
+  Independently verified before wiring: finder/timing/format geometry,
+  BCH-valid format info, Reed–Solomon syndromes zero, payload round-trip
+  (incl. UTF-8 + 106-byte maximum), remainder bits zeroed, oversize input
+  returns `null`. Regression tests in `test/qrcode.test.js`.
+- `docs/VIEW-ON-GLASSES-FALLBACK-SPEC.md`: the fallback UX spec.
+- `docs/PARITY-vs-official.md`: feature-by-feature parity assessment vs
+  Meta's official simulator (21/21 features with counterparts; hardware
+  handoff covered by the honest fallback). Linked from
+  `docs/VERIFICATION-2026-09-18.md` §9. No live official-extension run is
+  claimed — assessment is listing text + public README + repo source.
+
+### Fixed
+- Demo overlay wording: the display-frame toggle is now labeled "our
+  approximation of the official display-frame overlay … (not Meta's
+  artwork)" — never the official glasses overlay.
+
 ## [1.0.0] — 2026-09-18
 
 First public product release.
