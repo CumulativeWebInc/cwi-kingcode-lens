@@ -20,3 +20,28 @@ export { TTSAdapter } from './tts.js';
 export { DecisionAdapter } from './decision.js';
 export { SessionStore, ToolRegistry, defaultEyewearTools } from './session.js';
 export { ActivationSequencer } from './sequencer.js';
+export {
+  LENS,
+  DPAD_KEY,
+  dpadKey,
+  AUTO_DIM_MS,
+  AUTO_DIM_LEVEL,
+  clamp01,
+  displayFilters,
+  additiveBlendMode,
+  hexToRgb,
+  relativeLuminance,
+  isDarkForAdditive,
+  ENV_SCENES,
+  findScene,
+  qaLensSize,
+  qaNoScroll,
+  qaFrameBackdrop,
+  qaFocusableCount,
+  qaFocusVisible,
+  qaFontSizes,
+  qaFavicon,
+  qaTapTarget,
+  RECORDER,
+  svgToDataUrl,
+} from './sim-lab.js';

@@ -24,7 +24,11 @@
       <span id="lens-spec">600 &times; 600 &middot; additive &middot; SIMULATED</span>
       <span class="sim-badge small">SIMULATOR</span>
     </div>
-    <div id="lens" aria-label="Simulated lens display"></div>
+    <div id="lens" aria-label="Simulated lens display">
+      <div class="lens-bg" id="lens-bg"></div>
+      <video id="lens-cam" class="lens-bg" playsinline muted autoplay hidden></video>
+      <div class="lens-frame" id="lens-frame"></div>
+    </div>
     <div class="lens-caption">
       <span id="lens-state">state: idle</span>
       <span id="lens-seq">frame seq: —</span>
@@ -58,6 +62,60 @@
         <button id="no" class="no">No</button>
         <span id="countdown" class="countdown"></span>
       </div>
+    </div>
+
+    <div class="control-group">
+      <label>Lab: environment <span class="sim-badge small">SIMULATOR</span></label>
+      <label class="sub" for="env-scene">Backdrop scene</label>
+      <select id="env-scene">
+        <option value="lab-dark" selected>Lab dark (near-black)</option>
+        <option value="daylight">Daylight street</option>
+        <option value="night">Night city</option>
+        <option value="animated">Animated (CSS keyframes)</option>
+      </select>
+      <div class="btn-row">
+        <label class="file-btn">Upload backdrop<input type="file" id="env-upload" accept="image/*" hidden></label>
+        <button id="env-cam" class="ghost">Webcam: off</button>
+        <button id="env-clear" class="ghost">Reset backdrop</button>
+      </div>
+      <p class="hint">Official-simulator parity: built-in scenes, custom image upload, animated background, live webcam for real-world blending preview. The avatar layer composites additively (screen blend) over whatever is behind it.</p>
+    </div>
+
+    <div class="control-group">
+      <label>Lab: display settings</label>
+      <div class="slider-row"><span>App brightness</span><input type="range" id="set-app" min="20" max="120" value="100"><b id="set-app-v">100%</b></div>
+      <div class="slider-row"><span>Background brightness</span><input type="range" id="set-bg" min="10" max="150" value="100"><b id="set-bg-v">100%</b></div>
+      <div class="slider-row"><span>Background blur</span><input type="range" id="set-blur" min="0" max="20" value="0"><b id="set-blur-v">0px</b></div>
+      <div class="btn-row"><button id="set-dim" class="ghost">Auto-dim: on</button></div>
+      <p class="hint">Mirrors the official extension's display tuning. Auto-dim drops the app layer to 35% after 30s idle.</p>
+    </div>
+
+    <div class="control-group">
+      <label>Lab: D-pad <span class="sim-badge small">SIMULATOR</span></label>
+      <div class="dpad" role="group" aria-label="Simulated D-pad">
+        <span></span><button data-dpad="up" aria-label="D-pad up">&#9650;</button><span></span>
+        <button data-dpad="left" aria-label="D-pad left">&#9664;</button><button data-dpad="select" class="sel" aria-label="D-pad select">&#9679;</button><button data-dpad="right" aria-label="D-pad right">&#9654;</button>
+        <span></span><button data-dpad="down" aria-label="D-pad down">&#9660;</button><span></span>
+        <button data-dpad="back" class="back" aria-label="D-pad back">&#8617;</button>
+      </div>
+      <p class="hint">On-screen pad dispatches real key events (arrows / Enter / Escape), mirroring Neural Band + captouch + EMG-pinch translation. Physical arrow keys move focus between controls the same way; Enter activates the focused control.</p>
+    </div>
+
+    <div class="control-group">
+      <label>Lab: viewport recorder <span class="sim-badge small">SIMULATOR</span></label>
+      <div class="btn-row">
+        <button id="rec-start">&#9679; Record lens</button>
+        <button id="rec-stop" class="ghost" disabled>&#9632; Stop</button>
+        <a id="rec-dl" class="hidden dl" href="#" download="kingcode-lens.webm">Download WebM</a>
+      </div>
+      <p class="hint">Records the 600&times;600 lens as WebM (canvas capture, 30fps) — the official extension's viewport-recorder parity. Gradient scenes record over near-black; uploaded images and webcam record true.</p>
+    </div>
+
+    <div class="control-group">
+      <label>Lab: QA checklist <span class="sim-badge small">SIMULATOR</span></label>
+      <div class="btn-row"><button id="qa-run">Run QA checklist</button></div>
+      <ul id="qa-results" class="qa"></ul>
+      <p class="hint">Mirrors the official extension's automated checks — viewport surface, favicon, D-pad focusables, overflow, visible focus styles — plus the official design constraints: additive-dark backdrop, 16px/20px type, 88px tap targets.</p>
     </div>
 
     <div class="control-group">

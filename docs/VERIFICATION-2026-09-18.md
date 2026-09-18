@@ -105,6 +105,30 @@ All corrections + this report ship as one verification commit on top of `da4339b
 
 Tests after corrections: **82/82 pass** (`node --test`).
 
+## 7. Simulator lab — Track B (in-repo lab harness), 2026-09-18
+
+**Why:** the official Meta Ray-Ban Display Simulator Chrome extension needs a live browser session to install; Track A (live install) was not executable from this environment. Per Black's standing rule — a login/tool wall is a build spec — the lab was built from Meta's *own public* tooling instead: the official extension's feature list from `facebook/meta-wearables-webapp` (public README) plus the official web-apps build guide (public docs). No login, no cost, no hardware.
+
+**What the official extension does vs what our in-repo lab now covers** (lab lives permanently in `docs/`, pure logic in `src/sim-lab.js`, tested in `test/sim-lab.test.js`):
+
+| Official extension feature | Our lab (`docs/` + `src/sim-lab.js`) | Status |
+|---|---|---|
+| 600×600 display frame + additive blending | Lens layers: env background + app frame composited with `mix-blend-mode: screen` (pure black = transparent, like the waveguide) | ✅ parity |
+| Environment backgrounds (scenes, upload, animated, webcam) | 4 built-in scenes, custom image upload, CSS-animated backdrop, live webcam toggle | ✅ parity |
+| D-pad input (on-screen pad + arrow keys dispatch key events) | On-screen pad dispatches real `KeyboardEvent`s; physical arrows move focus between controls glasses-style; Enter = activate, Escape = back | ✅ parity |
+| Display settings (app brightness, bg brightness, bg blur, auto-dim) | Three sliders + auto-dim toggle (35% after 30s idle), pure `displayFilters()` helper | ✅ parity |
+| Viewport recorder (downloadable WebM) | Records the 600×600 lens via canvas `captureStream` + MediaRecorder → WebM download; frame rasterized with screen blend | ✅ parity (gradient scenes record over near-black — stated in UI) |
+| QA checklist (viewport, favicon, focusables, overflow, focus styles) | One-click run: lens 600×600, no-scroll, additive-dark backdrop (reads the SVG), focusable count, `:focus-visible` presence, 16px/20px type, PNG favicon, 88px tap targets (advisory) | ✅ parity + extras |
+| "View on Glasses" QR deep link | Not replicated — needs Meta's app deep-link scheme + hardware | ❌ exclusive to theirs |
+
+**Still exclusive to the official extension:** the "View on Glasses" QR (deep link into the Meta AI app — meaningless without hardware) and pixel-exact rendering of Meta's own frame overlay. Everything else a developer needs to QA a web app is now in our repo.
+
+**Track A install click-path (for the parent's browser delegation):** Chrome Web Store → search "Meta Ray-Ban Display Simulator" → Add to Chrome (no login needed) → navigate to `https://cumulativewebinc.github.io/cwi-kingcode-lens/` → click the extension icon to toggle → document viewport handling, additive blending, D-pad, backgrounds, display tuning, recording → screenshot/record. If the install fails, the exact failure text becomes the next build spec.
+
+**Files (this commit):** `src/sim-lab.js` (new, pure/tested), `test/sim-lab.test.js` (new, 23 tests), `src/index.js` (re-export), `docs/index.html` (lab panels + lens layers), `docs/style.css` (lab + layer styles), `docs/app.js` (lab wiring: env, display, D-pad, recorder, QA), `docs/vendor/src/*` (bundle re-emitted, now 13 modules incl. `sim-lab.js`), this report.
+
+Tests after lab build: **105/105 pass** (`node --test`; 82 existing + 23 new). $0 spent. No hardware. No logins used.
+
 ## 6. Items needing Black's tap
 
 1. **Meta Simulator install** — needs a live browser session (Chrome Web Store → "Meta Ray-Ban Display Simulator" → install → open our demo URL → toggle the extension). A browser task can do this under the saved-login authorization; this verifier cannot operate a browser. No Meta login, no cost.

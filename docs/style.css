@@ -36,7 +36,25 @@ main {
   border: 2px solid var(--line); border-radius: 18px; overflow: hidden;
   position: relative;
 }
-#lens svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 6px rgba(34,230,255,.35)); }
+/* Additive stack: environment behind, app frame composited with screen blend
+   (pure black contributes zero light -> transparent, like the waveguide). */
+.lens-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+}
+#lens-cam { width: 100%; height: 100%; object-fit: cover; }
+.lens-frame { position: absolute; inset: 0; mix-blend-mode: screen; }
+.lens-frame svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 6px rgba(34,230,255,.35)); }
+.lens-bg.animated {
+  background: linear-gradient(120deg, #0a1420, #123043, #0a1420, #1a2f1a, #0a1420);
+  background-size: 400% 400%;
+  animation: envdrift 14s ease-in-out infinite;
+}
+@keyframes envdrift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 #lens::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px);
@@ -60,7 +78,8 @@ button {
 }
 button:disabled { opacity: .35; cursor: not-allowed; }
 /* Meta web-app QA: visible focus styles (D-pad focus must be obvious). */
-button:focus-visible, select:focus-visible, input[type=text]:focus-visible {
+button:focus-visible, select:focus-visible, input[type=text]:focus-visible,
+input[type=range]:focus-visible {
   outline: 3px solid var(--cyan); outline-offset: 2px;
 }
 select:focus-visible, input[type=text]:focus-visible { border-color: var(--cyan); }
@@ -68,6 +87,37 @@ button.ghost { background: transparent; color: var(--dim); border: 1px solid var
 button.yes { background: var(--green); }
 button.no { background: var(--red); color: #fff; }
 .countdown { color: var(--amber); font-weight: 700; }
+/* ---- Simulator lab ---- */
+.sub { font-size: 11px; color: var(--dim); margin: 10px 0 6px; display: block; letter-spacing: .5px; }
+.slider-row { display: grid; grid-template-columns: 1fr 130px 52px; gap: 10px; align-items: center; margin: 8px 0; font-size: 12px; color: var(--dim); }
+.slider-row b { color: var(--ink); font-weight: 400; text-align: right; }
+input[type=range] { width: 100%; accent-color: var(--cyan); }
+.file-btn {
+  display: inline-block; background: transparent; color: var(--dim);
+  border: 1px solid var(--line); border-radius: 6px; padding: 10px 16px;
+  font: inherit; cursor: pointer;
+}
+.file-btn:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.dpad {
+  display: grid; grid-template-columns: repeat(3, 56px); grid-auto-rows: 56px;
+  gap: 6px; justify-content: start; margin: 4px 0;
+}
+.dpad button { padding: 0; font-size: 18px; border-radius: 10px; }
+.dpad button.sel { background: var(--amber); }
+.dpad button.back { grid-column: 1 / 4; font-size: 13px; }
+a.dl {
+  display: inline-block; background: var(--green); color: #04140a; border-radius: 6px;
+  padding: 10px 16px; font: inherit; font-weight: 700; text-decoration: none;
+}
+ul.qa { list-style: none; margin: 10px 0 0; padding: 0; font-size: 12px; line-height: 1.5; }
+ul.qa li { padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; margin-bottom: 6px; }
+ul.qa li.pass { border-color: #1f5c3a; }
+ul.qa li.pass::before { content: "✔ "; color: var(--green); font-weight: 700; }
+ul.qa li.fail { border-color: #6b2230; }
+ul.qa li.fail::before { content: "✘ "; color: var(--red); font-weight: 700; }
+ul.qa li.warn { border-color: #6b5320; }
+ul.qa li.warn::before { content: "⚠ "; color: var(--amber); font-weight: 700; }
+ul.qa .d { color: var(--dim); display: block; margin-top: 2px; }
 .hidden { display: none; }
 .confirm-prompt { font-size: 15px; color: var(--amber); }
 #log {
