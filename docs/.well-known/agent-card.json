@@ -1,1 +1,49 @@
-{"capabilities":["600x600 additive display simulation (black = transparent)","environment backgrounds: scenes, upload, animated, webcam","D-pad input: on-screen pad + arrow-key/Enter/Escape","display tuning: brightness, blur, auto-dimming, frame overlay","600x600 WebM viewport recording","automated QA checklist + 0-100 performance score","voice pipeline: wake-word simulation, STT, decision, TTS","avatar state machine with legal-transition enforcement","hardware adapter conformance suite (3 backends)"],"constraints":["simulator only — no physical-eyewear testing in v1","no Meta partnership, endorsement, or review","no camera/mic/notifications on the Meta web-app path (per Meta docs)","Android XR backend is a declared stub"],"description":"Web apps for Meta Ray-Ban Display glasses — previewed in your browser, no hardware needed. Simulator lab + conformance-tested adapter stack + invocable on-eyewear voice agent.","entrypoints":{"docs":"https://github.com/CumulativeWebInc/cwi-kingcode-lens/blob/main/docs/quickstart.md","llms_txt":"https://cumulativewebinc.github.io/cwi-kingcode-lens/llms.txt","release":"https://github.com/CumulativeWebInc/cwi-kingcode-lens/releases/tag/v1.0.0","repository":"https://github.com/CumulativeWebInc/cwi-kingcode-lens","simulator":"https://cumulativewebinc.github.io/cwi-kingcode-lens/"},"id":"https://github.com/CumulativeWebInc/cwi-kingcode-lens","license":{"commercial":"paid license required — hp@cumulativeweb.com","free_for":["personal","development","evaluation"],"name":"KingCode Lens Software License v1.0","type":"proprietary","url":"https://github.com/CumulativeWebInc/cwi-kingcode-lens/blob/main/LICENSE"},"name":"KingCode Lens","tests":"123/123 green (node --test)","updated":"2026-09-18","vendor":{"contact":"hp@cumulativeweb.com","name":"Cumulative Web Inc","url":"https://cumulativeweb.com"},"version":"1.0.0"}
+{
+  "capabilities": [
+    "600x600 additive display simulation (black = transparent)",
+    "environment backgrounds: scenes, upload, animated, webcam",
+    "D-pad input: on-screen pad + arrow-key/Enter/Escape",
+    "display tuning: brightness, blur, auto-dimming, frame overlay",
+    "600x600 WebM viewport recording",
+    "automated QA checklist + 0-100 performance score",
+    "voice pipeline: wake-word simulation, STT, decision, TTS",
+    "avatar state machine with legal-transition enforcement",
+    "hardware adapter conformance suite (3 backends)"
+  ],
+  "constraints": [
+    "simulator only — no physical-eyewear testing in v1",
+    "no Meta partnership, endorsement, or review",
+    "no camera/mic/notifications on the Meta web-app path (per Meta docs)",
+    "Android XR backend is a declared stub"
+  ],
+  "description": "Web apps for Meta Ray-Ban Display glasses — previewed in your browser, no hardware needed. Simulator lab + conformance-tested adapter stack + invocable on-eyewear voice agent.",
+  "entrypoints": {
+    "docs": "https://github.com/CumulativeWebInc/cwi-kingcode-lens/blob/main/docs/quickstart.md",
+    "llms_txt": "https://cumulativewebinc.github.io/cwi-kingcode-lens/llms.txt",
+    "release": "https://github.com/CumulativeWebInc/cwi-kingcode-lens/releases/tag/v1.0.0",
+    "repository": "https://github.com/CumulativeWebInc/cwi-kingcode-lens",
+    "simulator": "https://cumulativewebinc.github.io/cwi-kingcode-lens/"
+  },
+  "id": "https://github.com/CumulativeWebInc/cwi-kingcode-lens",
+  "license": {
+    "commercial": "paid license required — hp@cumulativeweb.com",
+    "free_for": [
+      "personal",
+      "development",
+      "evaluation"
+    ],
+    "name": "KingCode Lens Software License v1.0",
+    "type": "proprietary",
+    "url": "https://github.com/CumulativeWebInc/cwi-kingcode-lens/blob/main/LICENSE"
+  },
+  "name": "KingCode Lens",
+  "tests": "123/123 green (node --test)",
+  "updated": "2026-09-18",
+  "vendor": {
+    "contact": "hp@cumulativeweb.com",
+    "name": "Cumulative Web Inc",
+    "url": "https://cumulativeweb.com"
+  },
+  "version": "1.0.0",
+  "url": "https://cumulativewebinc.github.io/cwi-kingcode-lens/"
+}
