@@ -168,3 +168,7 @@ footer a { color: var(--cyan); }
 .req-box b { color: var(--amber); }
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--cyan); word-break: break-all; }
 .hint.tiny { font-size: 11px; }
+
+/* OS-fit retrofit: commercial-license CTA */
+.cta-license{display:inline-block;background:#e8b13c;color:#111;font-weight:700;border-radius:999px;padding:4px 14px;margin-left:6px;text-decoration:none}
+.cta-license:hover{background:#f5d67b;text-decoration:none}
