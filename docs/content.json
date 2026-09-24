@@ -1,0 +1,30 @@
+{
+ "schema_version": "cwi.content-index/1.0",
+ "day": "2026-09-24",
+ "id": "cwi-kingcode-lens",
+ "type": "product-launch",
+ "media_files": [
+  "index.html"
+ ],
+ "caption": "KingCode Lens v1.0.0 — web apps for Meta Ray-Ban Display glasses: simulator lab + \"Hey KingCode\" voice agent. Try the live demo free:",
+ "hashtags": [
+  "#KingCodeLens",
+  "#RayBanDisplay",
+  "#CumulativeWebInc",
+  "#WebApps",
+  "#AIAgents"
+ ],
+ "threads_text": "KingCode Lens v1.0.0 — web apps for Meta Ray-Ban Display glasses: simulator lab + \"Hey KingCode\" voice agent. Try the live demo free: https://cumulativewebinc.github.io/cwi-kingcode-lens/",
+ "post_order": 1,
+ "platform_targets": [
+  "github-pages"
+ ],
+ "product": {
+  "name": "KingCode Lens",
+  "version": "1.0.0",
+  "url": "https://cumulativewebinc.github.io/cwi-kingcode-lens/",
+  "self_contained": true,
+  "tests": "117/117 green (node --test, verified 2026-09-18)",
+  "license": "proprietary — free for personal/dev/eval; commercial use via hp@cumulativeweb.com"
+ }
+}
