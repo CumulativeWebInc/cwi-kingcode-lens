@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "KingCode Lens",
+  "url": "https://cumulativewebinc.github.io/cwi-kingcode-lens/",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web",
+  "author": {
+    "@type": "Organization",
+    "name": "Cumulative Web Inc",
+    "url": "https://cumulativeweb.com/"
+  },
+  "description": "Web apps for Meta Ray-Ban Display glasses: simulator lab plus Hey KingCode voice agent. v1.0.0, 117/117 tests.",
+  "schema_version": "1.0.0"
+}
